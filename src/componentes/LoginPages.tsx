@@ -1,13 +1,45 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+
 import { useAuthStore } from '../store/auth.store'
 
 export const LoginPages = () => {
-const authStatue = useAuthStore(state => state.status)
+const authStatus = useAuthStore(state => state.status)
+const user = useAuthStore(state => state.user)
+const login = useAuthStore(state => state.login)
+const logout = useAuthStore(state => state.logout)
+
+
+useEffect(() => { 
+  console.log('set timeout to rpobve')
+  setTimeout(() => {
+    logout();
+  }, 1500);
+
+ }, [])
+
+ if ( authStatus === 'checking') {
+  return <h3>Loading...</h3>
+}
 
   return (
-    <div>LoginPages
+    <div>
+      <h1>LoginPages</h1>
 
-        <h2>{authStatue}</h2>
+      {
+      (authStatus === 'authenticated') ?
+      <div>Autenticado como: {JSON.stringify(user, null,2)}</div>
+      : <div>No autenticado</div>
+      }
+ {
+      (authStatus === 'authenticated') ?
+      <button onClick={ logout }>Logout</button>
+      :  <button onClick={ ()=> login('Carloskubota@gmail.com', '123' ) }>Login</button>
+      }
+     
+
+      
+
+       
     </div>
   )
 }
